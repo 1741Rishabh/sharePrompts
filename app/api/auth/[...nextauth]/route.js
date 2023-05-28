@@ -4,7 +4,6 @@ import GitHubProvider from "next-auth/providers/github";
 import User from "@models/user";
 import { signIn } from "next-auth/react";
 
-console.log("route file run ");
 
 
 const handler = NextAuth({
@@ -16,19 +15,16 @@ const handler = NextAuth({
     ],
     callbacks: {
         async session({ session }) {
-           
             const sessionUser = await User.findOne({
                 email: session.user.email
             })
-            console.log(sessionUser._id.toString());
-
             session.user.id = sessionUser._id.toString();
             return session;
         },
         async signIn({ profile }) {
             try {
                 await connectToDB();
-                console.log("sign end funtion");
+                
                 //check if a user already exixts
                 const userExists = await User.findOne({ email: profile.email });
                 // if not create a new user 
@@ -42,7 +38,7 @@ const handler = NextAuth({
                 // check 
                 return true
             } catch (error) {
-                console.log("error came in login ");
+                
                 return false
             }
         }
