@@ -21,24 +21,26 @@ const handler = NextAuth({
             session.user.id = sessionUser._id.toString();
             return session;
         },
-        async signIn({ profile }) {
+        async signIn({ profile,user }) {
             try {
                 await connectToDB();
-                
+                console.log(profile.email,user);
+               
                 //check if a user already exixts
-                const userExists = await User.findOne({ email: profile.email });
+                const userExists = await User.findOne({ email: user.email });
                 // if not create a new user 
                 if (!userExists) {
                     await User.create({
-                        email: profile.email,
-                        username: profile.name.toLowerCase(),
-                        image: profile.avatar_url
+                        email: user.email,
+                        username: user.name.toLowerCase(),
+                        image: user.image
                     })
                 }
                 // check 
+                
                 return true
             } catch (error) {
-                
+                console.log(error,"error come in login");
                 return false
             }
         }
