@@ -6,8 +6,9 @@ const UserSchema = new Schema({
         unique :[true,'Email already exists!'],
         required:[true,'Email is required! '],
     },
-    Image:{
+    image:{
         type:String,
+        required:[true,'Image is required! '],
     },
     username:{
         type:String,

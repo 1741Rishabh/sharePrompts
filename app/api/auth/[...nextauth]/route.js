@@ -16,33 +16,34 @@ const handler = NextAuth({
     ],
     callbacks: {
         async session({ session }) {
-            console.log("rishabh database");
+           
             const sessionUser = await User.findOne({
                 email: session.user.email
             })
+            console.log(sessionUser._id.toString());
 
             session.user.id = sessionUser._id.toString();
             return session;
         },
         async signIn({ profile }) {
             try {
-                console.log("sign in funtion");
                 await connectToDB();
                 console.log("sign end funtion");
-
                 //check if a user already exixts
                 const userExists = await User.findOne({ email: profile.email });
                 // if not create a new user 
                 if (!userExists) {
                     await User.create({
                         email: profile.email,
-                        username: profile.name.replace(" ", "").toLowerCase(),
-                        image: profile.profile
+                        username: profile.name.toLowerCase(),
+                        image: profile.avatar_url
                     })
                 }
                 // check 
+                return true
             } catch (error) {
-
+                console.log("error came in login ");
+                return false
             }
         }
     }
